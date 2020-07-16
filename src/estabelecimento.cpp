@@ -87,13 +87,13 @@ void Estabelecimento::registrarVenda(Produto vendido) {
 }
 
 // Operacao de venda para o sistema do estabelecimento
-void Estabelecimento::venda(int codigo) {
+void Estabelecimento::venda(std::string nome) {
 
     // Procura na lista produto com o codigo requisitado
     for (int i = 0; i < estoque.getSize(); i++) {
     
         // Achou o produto e verifica se tem estoque suficiente para compra
-        if (estoque.at(i).codigo == codigo && estoqueAtual[i] > 0) {
+        if (estoque.at(i).nome == nome && estoqueAtual[i] > 0) {
             
             estoqueAtual[i]--;
             totalVendido++;

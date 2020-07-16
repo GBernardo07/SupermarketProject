@@ -18,7 +18,7 @@ class Estabelecimento {
     void consultarEstoque();
     void gerarCaixa();
     void listarProdutos();
-    void venda(int codigo);
+    void venda(std::string nome);
     void registrarVenda(Produto vendido);
     void caixa();
     void encerrarCaixa();

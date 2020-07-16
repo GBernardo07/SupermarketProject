@@ -60,10 +60,10 @@ int main(int argc, char *argv[]) {
         else if (acao.find("Comprar") != std::string::npos) {
 
             // Procurar na lista do estoque, o código do produto requisitado
-            for (auto i = 0; i < lojinha.estoque.getSize(); i++) {
+            for (int i = 0; i < lojinha.estoque.getSize(); i++) {
 
-                if (lojinha.estoque.at(i).codigo == stoi(acao.substr(8))) {
-                    lojinha.venda(stoi(acao.substr(8)));
+                if (lojinha.estoque.at(i).nome == acao.substr(8)) {
+                    lojinha.venda(acao.substr(8));
                     novoCliente->compra(lojinha.estoque.at(i));
                 }
                 
