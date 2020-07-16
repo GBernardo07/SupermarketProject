@@ -1,9 +1,8 @@
 #ifndef ESTABELECIMENTO_HPP
 #define ESTABELECIMENTO_HPP
 
-#include <list>
-
 #include "produto.hpp"
+#include "vecsupermarket.hpp"
 
 class Estabelecimento {
 
@@ -12,9 +11,9 @@ class Estabelecimento {
     Estabelecimento();
     ~Estabelecimento();
 
-    std::list <Produto> estoque;
+    vector_supermercado <Produto> estoque;
     double lucro;
-    int totalVendido;
+    int totalVendido, *estoqueAtual;
 
     void consultarEstoque();
     void gerarCaixa();
@@ -23,6 +22,7 @@ class Estabelecimento {
     void registrarVenda(Produto vendido);
     void caixa();
     void encerrarCaixa();
+    void reabastecer();
 
 };
 

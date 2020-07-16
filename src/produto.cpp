@@ -1,11 +1,9 @@
 #include <sstream>
 #include <iostream>
-#include <vector>
 
 #include "../include/produto.hpp"
 
-Produto::Produto() : codigo(0), qntdDisponivel(0), qntdVendida(0), preco(0),
-    nome(""), unidadeMedida("") {
+Produto::Produto() : codigo(0), estoqueInicial(0), preco(0), nome(""), unidadeMedida("") {
     
 }
 
@@ -46,7 +44,7 @@ Produto retornarProduto(std::string linha) {
             case 4:
                 aux.preco += stod(word) / 100;
             case 5:
-                aux.qntdDisponivel = stoi(word);
+                aux.estoqueInicial = stoi(word);
             default:
                 break;
         }
@@ -57,4 +55,32 @@ Produto retornarProduto(std::string linha) {
     }
 
     return aux;
+}
+
+Produto retornarProdutoFornecedor(std::string linha) {
+
+    int counter = 0;
+    std::stringstream stream(linha);
+    std::string word;
+    Produto aux;
+
+    while(getline(stream, word, ',')) {
+
+        switch (counter) {
+            case 0:
+                aux.nome = word;
+                break;
+            case 1:
+                aux.estoqueInicial = std::stoi(word);
+                break;
+            default:
+                break;
+        }
+
+        counter++;
+
+    }
+
+    return aux;
+
 }

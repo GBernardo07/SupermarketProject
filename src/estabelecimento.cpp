@@ -7,7 +7,7 @@
 
 Estabelecimento::Estabelecimento() : lucro(0), totalVendido(0) {
 
-    std::list <Produto> estoque;
+    vector_supermercado <Produto> estoque;
 
     // Recebe os produtos do arquivo csv
     consultarEstoque();
@@ -44,6 +44,10 @@ void Estabelecimento::consultarEstoque() {
 
     // Por algum motivo ele adiciona um produto a mais do que deveria
     estoque.pop_back();
+    estoqueAtual = new int[estoque.getSize()];
+
+    for (int i = 0; i < estoque.getSize(); i++)
+        estoqueAtual[i] = estoque.at(i).estoqueInicial;
 }
 
 void Estabelecimento::listarProdutos() {
@@ -51,14 +55,14 @@ void Estabelecimento::listarProdutos() {
     std::cout << "\nLista dos Produtos disponíveis\n" << std::endl;
 
     // Imprime todos os produtos disponíveis no estoque e seus atributos
-    for (auto it = estoque.begin(); it != estoque.end(); it++) {
+    for (int i = 0; i < estoque.getSize(); i++) {
 
-        std::cout << "Produto " << (*it).codigo << std::endl;
+        std::cout << "Produto " << estoque.at(i).codigo << std::endl;
 
-        std::cout << "Nome: " << (*it).nome << std::endl;
-        std::cout << "Preço: R$" << (*it).preco << std::endl;
-        std::cout << "Unidade de Medida: " << (*it).unidadeMedida << std::endl;
-        std::cout << "Quantidade disponível: " << (*it).qntdDisponivel << "\n" << std::endl;
+        std::cout << "Nome: " << estoque.at(i).nome << std::endl;
+        std::cout << "Preço: R$" << estoque.at(i).preco << std::endl;
+        std::cout << "Unidade de Medida: " << estoque.at(i).unidadeMedida << std::endl;
+        std::cout << "Quantidade disponível: " << estoqueAtual[i] << "\n" << std::endl;
     }
 }
 
@@ -78,7 +82,7 @@ void Estabelecimento::registrarVenda(Produto vendido) {
     std::ofstream outfile;
     outfile.open("caixa.csv", std::ofstream::app);
 
-    outfile << vendido.qntdVendida << " " << vendido.nome << " vendido" << std::endl;
+    outfile << estoque.at(vendido.codigo-1).codigo << " " << vendido.nome << " vendido" << std::endl;
 
 }
 
@@ -86,23 +90,22 @@ void Estabelecimento::registrarVenda(Produto vendido) {
 void Estabelecimento::venda(int codigo) {
 
     // Procura na lista produto com o codigo requisitado
-    for (auto it = estoque.begin(); it != estoque.end(); it++) {
-
+    for (int i = 0; i < estoque.getSize(); i++) {
+    
         // Achou o produto e verifica se tem estoque suficiente para compra
-        if ((*it).codigo == codigo && (*it).qntdDisponivel > 0) {
-
-            (*it).qntdDisponivel--;
-            (*it).qntdVendida++;
-            totalVendido++;
-            lucro+=(*it).preco;
+        if (estoque.at(i).codigo == codigo && estoqueAtual[i] > 0) {
             
-            registrarVenda((*it));
+            estoqueAtual[i]--;
+            totalVendido++;
+            lucro+=estoque.at(i).preco;
+            
+            registrarVenda(estoque.at(i));
             std::cout << "\nMercadoria retirada do estoque com sucesso!\n" << std::endl;
             return;
         }
     }
 
-    std::cout << "\nNao há estoque para compra.\n" << std::endl;
+    std::cout << "\nNão há estoque para compra.\n" << std::endl;
 }
 
 // Imprime as últimas operações do caixa
@@ -117,10 +120,10 @@ void Estabelecimento::caixa() {
     std::cout << "Foi vendido: \n" << std::endl;
 
     // Procura na lista do estoque algo com quantidade de vendas maior que zero
-    for (auto it = estoque.begin(); it != estoque.end(); it++) {
+    for (int i = 0; i < estoque.getSize(); i++) {
 
-        if ((*it).qntdVendida > 0)
-            std::cout << (*it).qntdVendida << " unidade(s) de " << (*it).nome << std::endl;
+        if (estoque.at(i).estoqueInicial - estoqueAtual[i] > 0)
+            std::cout << estoque.at(i).estoqueInicial - estoqueAtual[i] << " unidade(s) de " << estoque.at(i).nome << std::endl;
 
     }
 
@@ -137,10 +140,10 @@ void Estabelecimento::encerrarCaixa() {
     outfile << "\nRelatorio:\n" << std::endl;
     outfile << "Codigo, Nome, Quantidade vendida" << std::endl;
 
-    for (auto it = estoque.begin(); it != estoque.end(); it++) {
+    for (int i = 0; i < estoque.getSize(); i++) {
 
-        if ((*it).qntdVendida > 0)
-            outfile << (*it).codigo << "," << (*it).nome << "," << (*it).qntdVendida << std::endl;
+        if (estoque.at(i).estoqueInicial - estoqueAtual[i] > 0)
+            outfile << estoque.at(i).codigo << "," << estoque.at(i).nome << "," << estoque.at(i).estoqueInicial - estoqueAtual[i] << std::endl;
 
     }
 

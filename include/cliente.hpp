@@ -1,9 +1,8 @@
 #ifndef CLIENTE_HPP
 #define CLIENTE_HPP
 
-#include <vector>
-
 #include "produto.hpp"
+#include "vecsupermarket.hpp"
 
 class Cliente {
 
@@ -16,7 +15,7 @@ class Cliente {
     int numeroCliente;
     std::string nome;
     double saldo;
-    std::vector <Produto> sacola;
+    vector_supermercado <Produto> sacola;
 
     void registro(int numero);
     void adicionarSaldo();

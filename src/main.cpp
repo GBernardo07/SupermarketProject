@@ -3,12 +3,15 @@
 
 #include "../include/estabelecimento.hpp"
 #include "../include/cliente.hpp"
+#include "../include/fornecedor.hpp"
 
 // Funcao para imprimir as opcoes do usuário
 void imprimirOpcoes() {
 
     std::cout << "\n- Adicionar saldo" << std::endl;
     std::cout << "- Verificar produtos" << std::endl;
+    std::cout << "- Listar fornecedor" << std::endl;
+    std::cout << "- Reabastecer estoque" << std::endl;
     std::cout << "- Exibir caixa" << std::endl;
     std::cout << "- Ver sacola" << std::endl;
     std::cout << "- Comprar <codigo do produto>" << std::endl;
@@ -19,6 +22,7 @@ void imprimirOpcoes() {
 int main(int argc, char *argv[]) {
 
     // Declaração das variáveis gerais
+    Fornecedor provedor;
     Estabelecimento lojinha;
     Cliente *novoCliente = new Cliente;
     std::string acao, acao2;
@@ -45,6 +49,10 @@ int main(int argc, char *argv[]) {
             novoCliente->adicionarSaldo();
         else if (acao == "Verificar produtos")
             lojinha.listarProdutos();
+        else if (acao == "Listar fornecedor")
+            provedor.listarProdutos();
+        else if (acao == "Reabastecer estoque")
+            provedor.repassarProdutos(lojinha);
         else if (acao == "Exibir caixa")
             lojinha.caixa();
         else if (acao == "Ver sacola")
@@ -52,13 +60,13 @@ int main(int argc, char *argv[]) {
         else if (acao.find("Comprar") != std::string::npos) {
 
             // Procurar na lista do estoque, o código do produto requisitado
-            for (auto it = lojinha.estoque.begin(); it != lojinha.estoque.end(); it++) {
+            for (auto i = 0; i < lojinha.estoque.getSize(); i++) {
 
-                if ((*it).codigo == stoi(acao.substr(8))) {
+                if (lojinha.estoque.at(i).codigo == stoi(acao.substr(8))) {
                     lojinha.venda(stoi(acao.substr(8)));
-                    novoCliente->compra(*it);
+                    novoCliente->compra(lojinha.estoque.at(i));
                 }
-
+                
             }
 
         }
@@ -80,6 +88,7 @@ int main(int argc, char *argv[]) {
         else 
             std::cout << "Insira uma opcao valida\n" << std::endl;
 
+        imprimirOpcoes();
     }
 
     return 0;

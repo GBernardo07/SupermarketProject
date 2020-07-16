@@ -5,7 +5,7 @@
 
 Cliente::Cliente() : saldo(300) {
 
-    std::vector <Produto> sacola;
+    vector_supermercado <Produto> sacola;
     qntdClientes++;
     numeroCliente = qntdClientes;
 }
@@ -36,15 +36,15 @@ void Cliente::compra(Produto item) {
 // Exibe a sacola completa
 void Cliente::verSacola() {
 
-    if (sacola.size() == 0) {
+    if (sacola.getSize() == 0) {
         std::cout << "Nao ha itens na sacola\n" << std::endl;
         return;
     }
 
     std::cout << "Sacola: " << std::endl;
 
-    for (auto it = sacola.begin(); it != sacola.end(); it++)
-        std::cout << "- " << (*it).nome << std::endl;
+    for (int i = 0; i < sacola.getSize(); i++)
+        std::cout << "- " << sacola.at(i).nome << std::endl;
 
     std::cout << "\n";
 
@@ -74,8 +74,8 @@ void Cliente::registro(int numero) {
     outfile.open(filename);
         
     outfile << "Registro do cliente " << numero << "\n" << std::endl;
-    for (auto it = sacola.begin(); it != sacola.end(); it++)
-        outfile << "- " << (*it).nome << std::endl;
+    for (int i = 0; i < sacola.getSize(); i++)
+        outfile << "- " << sacola.at(i).nome << std::endl;
 
     outfile << "\n";
 
