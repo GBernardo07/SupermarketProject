@@ -45,6 +45,8 @@ void Estabelecimento::consultarEstoque() {
 
     // Por algum motivo ele adiciona um produto a mais do que deveria
     estoque.pop_back();
+
+    // Definição de array simples que armazena as quantidades no estoque para controle simples
     estoqueAtual = new int[estoque.getSize()];
 
     for (int i = 0; i < estoque.getSize(); i++)
@@ -99,7 +101,10 @@ void Estabelecimento::venda(std::string nome) {
             estoqueAtual[i]--;
             totalVendido++;
             lucro+=estoque.at(i).preco;
+
+            //Funcao que mexe no respectivo arquivo
             alterarEstoque("estoque.csv", nome, estoqueAtual[i]);
+            
             registrarVenda(estoque.at(i));
             std::cout << "\nMercadoria retirada do estoque com sucesso!\n" << std::endl;
             return;

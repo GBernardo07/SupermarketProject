@@ -18,6 +18,7 @@ Fornecedor::~Fornecedor() {
 
 }
 
+// Consulta o arquivo "fornecedor.csv" e insere tudo no vector
 void Fornecedor::consultarEstoque() {
 
     std::ifstream infile;
@@ -39,6 +40,7 @@ void Fornecedor::consultarEstoque() {
     estoque.pop_back();
 }
 
+// Lista os produtos do Fornecedor
 void Fornecedor::listarProdutos() {
 
     std::cout << "\nLista dos Produtos disponíveis no fornecedor\n" << std::endl;
@@ -51,6 +53,7 @@ void Fornecedor::listarProdutos() {
 
 }
 
+// Repassa produtos do fornecedor para a loja
 void Fornecedor::repassarProdutos(Estabelecimento &loja) {
 
     int qntd;

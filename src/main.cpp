@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
             novoCliente->verSacola();
         else if (acao.find("Comprar") != std::string::npos) {
 
-            // Procurar na lista do estoque, o código do produto requisitado
+            // Procurar na lista do estoque, o nome do produto requisitado
             for (int i = 0; i < lojinha.estoque.getSize(); i++) {
 
                 if (lojinha.estoque.at(i).nome == acao.substr(8)) {
@@ -74,6 +74,8 @@ int main(int argc, char *argv[]) {
             std::cout << "Deseja fazer compras com outro cliente? (s/n)" << std::endl;
             std::cout << "-> ";
             getline(std::cin, acao2);
+            
+            //Muda entre clientes
             if (acao2 == "s") {
                 delete novoCliente;
                 novoCliente = new Cliente;

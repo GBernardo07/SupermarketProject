@@ -57,6 +57,7 @@ Produto retornarProduto(std::string linha) {
     return aux;
 }
 
+// Realiza o mesmo processo, mas com a formatação diferente
 Produto retornarProdutoFornecedor(std::string linha) {
 
     int counter = 0;
