@@ -14,7 +14,7 @@ void imprimirOpcoes() {
     std::cout << "- Reabastecer estoque" << std::endl;
     std::cout << "- Exibir caixa" << std::endl;
     std::cout << "- Ver sacola" << std::endl;
-    std::cout << "- Comprar <codigo do produto>" << std::endl;
+    std::cout << "- Comprar <Nome do Produto>" << std::endl;
     std::cout << "- Checkout\n" << std::endl;
 
 }

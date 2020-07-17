@@ -4,6 +4,7 @@
 
 #include "../include/produto.hpp"
 #include "../include/estabelecimento.hpp"
+#include "../include/estoque.hpp"
 
 Estabelecimento::Estabelecimento() : lucro(0), totalVendido(0) {
 
@@ -98,7 +99,7 @@ void Estabelecimento::venda(std::string nome) {
             estoqueAtual[i]--;
             totalVendido++;
             lucro+=estoque.at(i).preco;
-            
+            alterarEstoque("estoque.csv", nome, estoqueAtual[i]);
             registrarVenda(estoque.at(i));
             std::cout << "\nMercadoria retirada do estoque com sucesso!\n" << std::endl;
             return;
