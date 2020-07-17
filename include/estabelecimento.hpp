@@ -22,7 +22,6 @@ class Estabelecimento {
     void registrarVenda(Produto vendido);
     void caixa();
     void encerrarCaixa();
-    void reabastecer();
     void setarArrayVendas();
 
 };
