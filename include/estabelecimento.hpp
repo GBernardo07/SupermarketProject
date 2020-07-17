@@ -13,7 +13,7 @@ class Estabelecimento {
 
     vector_supermercado <Produto> estoque;
     double lucro;
-    int totalVendido, *estoqueAtual;
+    int totalVendido, *qntdVendida;
 
     void consultarEstoque();
     void gerarCaixa();
@@ -23,6 +23,7 @@ class Estabelecimento {
     void caixa();
     void encerrarCaixa();
     void reabastecer();
+    void setarArrayVendas();
 
 };
 

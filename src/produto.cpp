@@ -3,7 +3,7 @@
 
 #include "../include/produto.hpp"
 
-Produto::Produto() : codigo(0), estoqueInicial(0), preco(0), nome(""), unidadeMedida("") {
+Produto::Produto() : codigo(0), estoqueAtual(0), preco(0), nome(""), unidadeMedida("") {
     
 }
 
@@ -44,7 +44,7 @@ Produto retornarProduto(std::string linha) {
             case 4:
                 aux.preco += stod(word) / 100;
             case 5:
-                aux.estoqueInicial = stoi(word);
+                aux.estoqueAtual = stoi(word);
             default:
                 break;
         }
@@ -72,7 +72,7 @@ Produto retornarProdutoFornecedor(std::string linha) {
                 aux.nome = word;
                 break;
             case 1:
-                aux.estoqueInicial = std::stoi(word);
+                aux.estoqueAtual = std::stoi(word);
                 break;
             default:
                 break;

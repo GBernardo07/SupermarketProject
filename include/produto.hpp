@@ -10,7 +10,7 @@ class Produto {
     Produto();
     ~Produto();
 
-    int codigo, estoqueInicial;
+    int codigo, estoqueAtual;
     double preco;
     std::string nome, unidadeMedida;
 

@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 
             // Procurar na lista do estoque, o nome do produto requisitado
             for (int i = 0; i < lojinha.estoque.getSize(); i++) {
-
+                
                 if (lojinha.estoque.at(i).nome == acao.substr(8)) {
                     lojinha.venda(acao.substr(8));
                     novoCliente->compra(lojinha.estoque.at(i));
@@ -69,12 +69,14 @@ int main(int argc, char *argv[]) {
                 
             }
 
+            lojinha.consultarEstoque();
+
         }
         else if (acao == "Checkout") {
             std::cout << "Deseja fazer compras com outro cliente? (s/n)" << std::endl;
             std::cout << "-> ";
             getline(std::cin, acao2);
-            
+
             //Muda entre clientes
             if (acao2 == "s") {
                 delete novoCliente;

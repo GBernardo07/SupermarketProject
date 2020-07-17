@@ -15,6 +15,10 @@ Estabelecimento::Estabelecimento() : lucro(0), totalVendido(0) {
 
     // Gera o arquivo do caixa final
     gerarCaixa();
+    
+    // Definição de array simples que armazena as quantidades vendidas
+    setarArrayVendas();
+    
 }
 
 Estabelecimento::~Estabelecimento() {
@@ -24,12 +28,26 @@ Estabelecimento::~Estabelecimento() {
 
 }
 
+void Estabelecimento::setarArrayVendas() {
+
+    qntdVendida = new int[estoque.getSize()];
+    
+    for (int i = 0; i < estoque.getSize(); i++)
+        qntdVendida[i] = 0;
+
+}
+
 void Estabelecimento::consultarEstoque() {
 
     std::ifstream infile;
     std::string line;
 
     infile.open("estoque.csv");
+
+    estoque.clear();
+
+    for (int i = 0; i < estoque.getSize(); i++)
+        std::cout << estoque.at(i).nome;
 
     // Para cada linha do arquivo, insere na lista do estoque um produto
     while(!infile.eof()) {
@@ -46,11 +64,6 @@ void Estabelecimento::consultarEstoque() {
     // Por algum motivo ele adiciona um produto a mais do que deveria
     estoque.pop_back();
 
-    // Definição de array simples que armazena as quantidades no estoque para controle simples
-    estoqueAtual = new int[estoque.getSize()];
-
-    for (int i = 0; i < estoque.getSize(); i++)
-        estoqueAtual[i] = estoque.at(i).estoqueInicial;
 }
 
 void Estabelecimento::listarProdutos() {
@@ -65,7 +78,7 @@ void Estabelecimento::listarProdutos() {
         std::cout << "Nome: " << estoque.at(i).nome << std::endl;
         std::cout << "Preço: R$" << estoque.at(i).preco << std::endl;
         std::cout << "Unidade de Medida: " << estoque.at(i).unidadeMedida << std::endl;
-        std::cout << "Quantidade disponível: " << estoqueAtual[i] << "\n" << std::endl;
+        std::cout << "Quantidade disponível: " << estoque.at(i).estoqueAtual << "\n" << std::endl;
     }
 }
 
@@ -96,15 +109,14 @@ void Estabelecimento::venda(std::string nome) {
     for (int i = 0; i < estoque.getSize(); i++) {
     
         // Achou o produto e verifica se tem estoque suficiente para compra
-        if (estoque.at(i).nome == nome && estoqueAtual[i] > 0) {
+        if (estoque.at(i).nome == nome && estoque.at(i).estoqueAtual > 0) {
             
-            estoqueAtual[i]--;
+            qntdVendida[i]++;
             totalVendido++;
             lucro+=estoque.at(i).preco;
 
             //Funcao que mexe no respectivo arquivo
-            alterarEstoque("estoque.csv", nome, estoqueAtual[i]);
-            
+            alterarEstoque("estoque.csv", nome, estoque.at(i).estoqueAtual-1);
             registrarVenda(estoque.at(i));
             std::cout << "\nMercadoria retirada do estoque com sucesso!\n" << std::endl;
             return;
@@ -128,8 +140,8 @@ void Estabelecimento::caixa() {
     // Procura na lista do estoque algo com quantidade de vendas maior que zero
     for (int i = 0; i < estoque.getSize(); i++) {
 
-        if (estoque.at(i).estoqueInicial - estoqueAtual[i] > 0)
-            std::cout << estoque.at(i).estoqueInicial - estoqueAtual[i] << " unidade(s) de " << estoque.at(i).nome << std::endl;
+        if (qntdVendida[i] > 0)
+            std::cout << qntdVendida[i] << " unidade(s) de " << estoque.at(i).nome << std::endl;
 
     }
 
@@ -148,8 +160,8 @@ void Estabelecimento::encerrarCaixa() {
 
     for (int i = 0; i < estoque.getSize(); i++) {
 
-        if (estoque.at(i).estoqueInicial - estoqueAtual[i] > 0)
-            outfile << estoque.at(i).codigo << "," << estoque.at(i).nome << "," << estoque.at(i).estoqueInicial - estoqueAtual[i] << std::endl;
+        if (qntdVendida[i] > 0)
+            outfile << estoque.at(i).codigo << "," << estoque.at(i).nome << "," << qntdVendida[i] << std::endl;
 
     }
 

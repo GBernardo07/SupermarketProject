@@ -50,13 +50,19 @@ class vector_supermercado {
             doubleCapacity();
 
         elements[size] = object;
-        size++;
+        this->size++;
     }
 
     void pop_back() {
 
         tipo lixo;
         elements[--size] = lixo;
+    }
+
+    void clear() {
+
+        size = 0;
+
     }
 
 };

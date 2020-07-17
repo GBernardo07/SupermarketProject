@@ -26,6 +26,8 @@ void Fornecedor::consultarEstoque() {
 
     infile.open("fornecedor.csv");
 
+    estoque.clear();
+
     while(!infile.eof()) {
 
         std::getline(infile, line);
@@ -47,7 +49,7 @@ void Fornecedor::listarProdutos() {
     
     for (int i = 0; i < estoque.getSize(); i++) {
 
-        std::cout << "Produto: " << estoque.at(i).nome << " Qntd: " << estoque.at(i).estoqueInicial << std::endl;
+        std::cout << "Produto: " << estoque.at(i).nome << " Qntd: " << estoque.at(i).estoqueAtual << std::endl;
 
     }
 
@@ -68,16 +70,16 @@ void Fornecedor::repassarProdutos(Estabelecimento &loja) {
 
     for (int i = 0; i < loja.estoque.getSize(); i++) {
         if (loja.estoque.at(i).nome == line) {
-            if (estoque.at(i).estoqueInicial >= qntd) {
-                loja.estoqueAtual[i]+=qntd;
-                alterarEstoque("estoque.csv", line, loja.estoqueAtual[i]);
-                alterarEstoque("fornecedor.csv", line, estoque.at(i).estoqueInicial-qntd);
+            if (estoque.at(i).estoqueAtual >= qntd) {
+                alterarEstoque("estoque.csv", line, loja.estoque.at(i).estoqueAtual+qntd);
+                alterarEstoque("fornecedor.csv", line, estoque.at(i).estoqueAtual-qntd);
             }
             else 
                 std::cout << "\nNão há estoque disponível no fornecedor\n" << std::endl;
         }
     }
     
+    loja.consultarEstoque();
     consultarEstoque();
 
 }
