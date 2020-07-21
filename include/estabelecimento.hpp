@@ -11,20 +11,12 @@ class Estabelecimento {
     Estabelecimento();
     ~Estabelecimento();
 
-    vector_supermercado <Produto> estoque;
     double lucro;
     int totalVendido, *qntdVendida;
 
-    void consultarEstoque();
-    void gerarCaixa();
-    void listarProdutos();
-    void venda(std::string nome);
-    void registrarVenda(Produto vendido);
-    void caixa();
-    void encerrarCaixa();
-    void setarArrayVendas();
+    void gerarCaixa(std::string filename);
+    void caixa(vector_supermercado <Produto> vetor);
 
 };
-
 
 #endif

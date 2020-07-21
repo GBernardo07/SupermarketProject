@@ -8,126 +8,26 @@
 
 Estabelecimento::Estabelecimento() : lucro(0), totalVendido(0) {
 
-    vector_supermercado <Produto> estoque;
-
-    // Recebe os produtos do arquivo csv
-    consultarEstoque();
-
-    // Gera o arquivo do caixa final
-    gerarCaixa();
-    
-    // Definição de array simples que armazena as quantidades vendidas
-    setarArrayVendas();
     
 }
 
 Estabelecimento::~Estabelecimento() {
 
-    // Encerra o caixa e termina o arquivo caixa.csv
-    encerrarCaixa();
 
-}
-
-void Estabelecimento::setarArrayVendas() {
-
-    qntdVendida = new int[estoque.getSize()];
-    
-    for (int i = 0; i < estoque.getSize(); i++)
-        qntdVendida[i] = 0;
-
-}
-
-void Estabelecimento::consultarEstoque() {
-
-    std::ifstream infile;
-    std::string line;
-
-    infile.open("estoque.csv");
-
-    estoque.clear();
-
-    for (int i = 0; i < estoque.getSize(); i++)
-        std::cout << estoque.at(i).nome;
-
-    // Para cada linha do arquivo, insere na lista do estoque um produto
-    while(!infile.eof()) {
-
-        std::getline(infile, line);
-
-        if (line.substr(0, 3) == "COD")
-            continue;
-        
-        estoque.push_back(retornarProduto(line));
-
-    }
-
-    // Por algum motivo ele adiciona um produto a mais do que deveria
-    estoque.pop_back();
-
-}
-
-void Estabelecimento::listarProdutos() {
-
-    std::cout << "\nLista dos Produtos disponíveis\n" << std::endl;
-
-    // Imprime todos os produtos disponíveis no estoque e seus atributos
-    for (int i = 0; i < estoque.getSize(); i++) {
-
-        std::cout << "Produto " << estoque.at(i).codigo << std::endl;
-
-        std::cout << "Nome: " << estoque.at(i).nome << std::endl;
-        std::cout << "Preço: R$" << estoque.at(i).preco << std::endl;
-        std::cout << "Unidade de Medida: " << estoque.at(i).unidadeMedida << std::endl;
-        std::cout << "Quantidade disponível: " << estoque.at(i).estoqueAtual << "\n" << std::endl;
-    }
 }
 
 // Gera o arquivo do caixa
-void Estabelecimento::gerarCaixa() {
+void Estabelecimento::gerarCaixa(std::string filename) {
 
     std::ofstream outfile;
-    outfile.open("caixa.csv");
+    outfile.open(filename);
 
     outfile << "Caixa Geral \n" << std::endl;
 
 }
 
-// Registra no arquivo do caixa um "log" de vendas
-void Estabelecimento::registrarVenda(Produto vendido) {
-
-    std::ofstream outfile;
-    outfile.open("caixa.csv", std::ofstream::app);
-
-    outfile << estoque.at(vendido.codigo-1).codigo << " " << vendido.nome << " vendido" << std::endl;
-
-}
-
-// Operacao de venda para o sistema do estabelecimento
-void Estabelecimento::venda(std::string nome) {
-
-    // Procura na lista produto com o codigo requisitado
-    for (int i = 0; i < estoque.getSize(); i++) {
-    
-        // Achou o produto e verifica se tem estoque suficiente para compra
-        if (estoque.at(i).nome == nome && estoque.at(i).estoqueAtual > 0) {
-            
-            qntdVendida[i]++;
-            totalVendido++;
-            lucro+=estoque.at(i).preco;
-
-            //Funcao que mexe no respectivo arquivo
-            alterarEstoque("estoque.csv", nome, estoque.at(i).estoqueAtual-1);
-            registrarVenda(estoque.at(i));
-            std::cout << "\nMercadoria retirada do estoque com sucesso!\n" << std::endl;
-            return;
-        }
-    }
-
-    std::cout << "\nNão há estoque para compra.\n" << std::endl;
-}
-
 // Imprime as últimas operações do caixa
-void Estabelecimento::caixa() {
+void Estabelecimento::caixa(vector_supermercado <Produto> vetor) {
 
     // Pro caso de nada ter sido vendido ainda
     if (totalVendido == 0) {
@@ -138,33 +38,13 @@ void Estabelecimento::caixa() {
     std::cout << "Foi vendido: \n" << std::endl;
 
     // Procura na lista do estoque algo com quantidade de vendas maior que zero
-    for (int i = 0; i < estoque.getSize(); i++) {
+    for (int i = 0; i < vetor.getSize(); i++) {
 
         if (qntdVendida[i] > 0)
-            std::cout << qntdVendida[i] << " unidade(s) de " << estoque.at(i).nome << std::endl;
+            std::cout << qntdVendida[i] << " unidade(s) de " << vetor.at(i).nome << std::endl;
 
     }
 
     std::cout << "Lucro total: R$" << lucro << "\n" << std::endl;
-
-}
-
-void Estabelecimento::encerrarCaixa() {
-
-    std::ofstream outfile;
-    outfile.open("caixa.csv", std::ofstream::app);
-
-    // Registra no arquivo todos os produtos com quantidade vendida maior que zero e o lucro total
-    outfile << "\nRelatorio:\n" << std::endl;
-    outfile << "Codigo, Nome, Quantidade vendida" << std::endl;
-
-    for (int i = 0; i < estoque.getSize(); i++) {
-
-        if (qntdVendida[i] > 0)
-            outfile << estoque.at(i).codigo << "," << estoque.at(i).nome << "," << qntdVendida[i] << std::endl;
-
-    }
-
-    outfile << "\nLucro total:," << lucro << std::endl;
 
 }

@@ -2,97 +2,190 @@
 #include <string>
 
 #include "../include/estabelecimento.hpp"
+#include "../include/supermercado.hpp"
+#include "../include/restaurante.hpp"
 #include "../include/cliente.hpp"
 #include "../include/fornecedor.hpp"
-
-// Funcao para imprimir as opcoes do usuário
-void imprimirOpcoes() {
-
-    std::cout << "\n- Adicionar saldo" << std::endl;
-    std::cout << "- Verificar produtos" << std::endl;
-    std::cout << "- Listar fornecedor" << std::endl;
-    std::cout << "- Reabastecer estoque" << std::endl;
-    std::cout << "- Exibir caixa" << std::endl;
-    std::cout << "- Ver sacola" << std::endl;
-    std::cout << "- Comprar <Nome do Produto>" << std::endl;
-    std::cout << "- Checkout\n" << std::endl;
-
-}
 
 int main(int argc, char *argv[]) {
 
     // Declaração das variáveis gerais
-    Fornecedor provedor;
-    Estabelecimento lojinha;
+    int n;
     Cliente *novoCliente = new Cliente;
-    std::string acao, acao2;
+    std::string opcao, acao, acao2;
 
     // Recebe nome do cliente
     std::cout << "Insira seu nome: ";
     std::getline (std::cin, novoCliente->nome);
 
-    // Introdução
-    std::cout << "\nBem vindo ao supermercado, " << novoCliente->nome << std::endl;
-    std::cout << "Voce tem R$" << novoCliente->saldo << " de saldo!\n" << std::endl;
-    std::cout << "Escolha uma opcao: " << std::endl;
+    std::cout << "\n" << novoCliente->nome << ", escolha uma opcao:" << std::endl;
+    std::cout << "- Supermercado" << std::endl;
+    std::cout << "- Restaurante" << std::endl;
+    std::cout << "-> ";
+    std::getline(std::cin, opcao);
 
-    imprimirOpcoes();
+    if (opcao == "Supermercado") {
 
-    // Loop do menu
-    while (true) {
+        Fornecedor provedor;
+        Supermercado super;
 
-        std::cout << "-> ";
-        getline(std::cin, acao);
+        // Introdução
+        std::cout << "\nBem vindo ao supermercado, " << novoCliente->nome << std::endl;
+        std::cout << "Voce tem R$" << novoCliente->saldo << " de saldo!\n" << std::endl;
+        std::cout << "Escolha uma opcao: " << std::endl;
 
-        // Escolha das opções disponíveis
-        if (acao == "Adicionar saldo")
-            novoCliente->adicionarSaldo();
-        else if (acao == "Verificar produtos")
-            lojinha.listarProdutos();
-        else if (acao == "Listar fornecedor")
-            provedor.listarProdutos();
-        else if (acao == "Reabastecer estoque")
-            provedor.repassarProdutos(lojinha);
-        else if (acao == "Exibir caixa")
-            lojinha.caixa();
-        else if (acao == "Ver sacola")
-            novoCliente->verSacola();
-        else if (acao.find("Comprar") != std::string::npos) {
+        super.imprimirOpcoes();
 
-            // Procurar na lista do estoque, o nome do produto requisitado
-            for (int i = 0; i < lojinha.estoque.getSize(); i++) {
-                
-                if (lojinha.estoque.at(i).nome == acao.substr(8)) {
-                    lojinha.venda(acao.substr(8));
-                    novoCliente->compra(lojinha.estoque.at(i));
-                }
-                
-            }
+        // Loop do menu
+        while (true) {
 
-            lojinha.consultarEstoque();
-
-        }
-        else if (acao == "Checkout") {
-            std::cout << "Deseja fazer compras com outro cliente? (s/n)" << std::endl;
             std::cout << "-> ";
-            getline(std::cin, acao2);
 
-            //Muda entre clientes
-            if (acao2 == "s") {
-                delete novoCliente;
-                novoCliente = new Cliente;
+            getline(std::cin, acao);
+
+            // Escolha das opções disponíveis
+            try {
+
+                if (acao == "Adicionar saldo")
+                    novoCliente->adicionarSaldo();
+                else if (acao == "Verificar produtos")
+                    super.listarProdutos();
+                else if (acao == "Listar fornecedor")
+                    provedor.listarProdutos();
+                else if (acao == "Reabastecer estoque")
+                    provedor.repassarProdutos(super);
+                else if (acao == "Exibir caixa")
+                    super.caixa(super.estoque);
+                else if (acao == "Ver sacola")
+                    novoCliente->verCompras();
+                else if (acao.find("Comprar") != std::string::npos) {
+
+                    // Procurar na lista do estoque, o nome do produto requisitado
+                    for (int i = 0; i < super.estoque.getSize(); i++) {
+                        
+                        if (super.estoque.at(i).nome == acao.substr(8)) {
+                            super.venda(acao.substr(8));
+                            novoCliente->compra(super.estoque.at(i), 1);
+                        }
+                        
+                    }
+
+                    super.consultarEstoque();
+
+                }
+                else if (acao == "Checkout") {
+                    std::cout << "Deseja fazer compras com outro cliente? (s/n)" << std::endl;
+                    std::cout << "-> ";
+                    getline(std::cin, acao2);
+
+                    //Muda entre clientes
+                    try {
+                        if (acao2 == "s") {
+                            delete novoCliente;
+                            novoCliente = new Cliente;
+                        }
+                        else if (acao2 == "n") {
+                            delete novoCliente;
+                            return 0;
+                        }
+                        else
+                            throw("\nInsira uma opcao valida");
+                    }
+                    catch(const char *S) {
+                        std::cout << S << std::endl;
+                    }
+
+                }
+                else 
+                    throw("Insira uma opcao valida\n");
+
+                }
+
+            catch(const char *S) {
+                std::cout << S << std::endl;
             }
-            else if (acao2 == "n") {
-                delete novoCliente;
-                return 0;
-            }
-            else
-                std::cout << "Insira uma opcao valida\n" << std::endl;
+
+            super.imprimirOpcoes();
         }
-        else 
-            std::cout << "Insira uma opcao valida\n" << std::endl;
 
-        imprimirOpcoes();
+    }
+
+    else if (opcao == "Restaurante") {
+
+        Restaurante rest;
+
+        std::cout << "\nBem vindo ao restaurante, " << novoCliente->nome << std::endl;
+        std::cout << "Voce tem R$" << novoCliente->saldo << " de saldo!\n" << std::endl;
+        std::cout << "Escolha uma opcao: " << std::endl;
+
+        rest.imprimirOpcoes();
+
+        while (true) {
+
+            std::cout << "-> ";
+            getline(std::cin, acao);
+
+            try {
+
+                if (acao == "Adicionar saldo")
+                    novoCliente->adicionarSaldo();
+                else if (acao == "Verificar cardapio")
+                    rest.mostrarCardapio();
+                else if (acao == "Exibir caixa")
+                    rest.caixa(rest.cardapio);
+                else if (acao == "Ver comanda")
+                    novoCliente->verCompras();
+                else if (acao.find("Pedir") != std::string::npos) {
+                    std::cout << "Quantidade: ";
+                    std::cin >> n;
+                    std::cin.ignore();
+                    // Procurar na lista do estoque, o nome do produto requisitado
+                    for (int i = 0; i < rest.cardapio.getSize(); i++) {
+                        
+                        if (rest.cardapio.at(i).nome == acao.substr(6)) {
+                            rest.venda(acao.substr(6), n);
+                            novoCliente->compra(rest.cardapio.at(i), n);
+                        }
+                        
+                    }
+
+                }
+                else if (acao == "Checkout") {
+                    std::cout << "Deseja fazer compras com outro cliente? (s/n)" << std::endl;
+                    std::cout << "-> ";
+                    getline(std::cin, acao2);
+
+                    //Muda entre clientes
+                    try {
+                        if (acao2 == "s") {
+                            delete novoCliente;
+                            novoCliente = new Cliente;
+                        }
+                        else if (acao2 == "n") {
+                            delete novoCliente;
+                            return 0;
+                        }
+                        else
+                            throw("\nInsira uma opcao valida");
+                    }
+
+                    catch(const char *S) {
+                        std::cout << S << std::endl;
+                    }
+                }
+
+                else 
+                    throw("Insira uma opcao valida\n");
+
+            }
+
+            catch (const char *S) {
+                std::cout << S << std::endl;
+            }
+            
+            rest.imprimirOpcoes();
+
+        }
     }
 
     return 0;

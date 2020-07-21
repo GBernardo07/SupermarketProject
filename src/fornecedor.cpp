@@ -6,6 +6,7 @@
 #include "../include/fornecedor.hpp"
 #include "../include/estoque.hpp"
 
+
 Fornecedor::Fornecedor() {
 
     vector_supermercado <Produto> estoque;
@@ -56,7 +57,7 @@ void Fornecedor::listarProdutos() {
 }
 
 // Repassa produtos do fornecedor para a loja
-void Fornecedor::repassarProdutos(Estabelecimento &loja) {
+void Fornecedor::repassarProdutos(Supermercado &loja) {
 
     int qntd;
     std::string line;

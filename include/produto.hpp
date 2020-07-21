@@ -16,7 +16,8 @@ class Produto {
 
 };
 
-Produto retornarProduto(std::string linha);
+Produto retornarProdutoSupermercado(std::string linha);
+Produto retornarProdutoRestaurante(std::string linha);
 Produto retornarProdutoFornecedor(std::string linha);
 
 

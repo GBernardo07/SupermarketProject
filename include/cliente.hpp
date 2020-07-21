@@ -15,12 +15,12 @@ class Cliente {
     int numeroCliente;
     std::string nome;
     double saldo;
-    vector_supermercado <Produto> sacola;
+    vector_supermercado <Produto> compras;
 
     void registro(int numero);
     void adicionarSaldo();
-    void compra(Produto item);
-    void verSacola();
+    void compra(Produto item, int qntd);
+    void verCompras();
 
 };
 

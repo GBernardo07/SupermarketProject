@@ -1,4 +1,4 @@
-Atividade Supermercado
+Atividade Estabelecimentos
 
 Visão geral
 
@@ -10,7 +10,10 @@ Visão geral
 Main
 
     O main foi utilizado principalmente para realizar a interação com o usuário.
-    Ele apresenta a interface e exibe as opções disponíveis. São elas:
+    Ele apresenta a interface e exibe as opções disponíveis, de acordo com a escolha do usuário.
+    Primeiro é pedido seu nome, depois pode-se escolher utilizar o restaurante ou o supermercado.
+    
+    No supermercado, as opções são as seguintes:
     
         Adicionar saldo: Essa opção pede o valor a ser inserido no saldo do cliente.
         Verificar produtos: Essa opção imprime todos os produtos disponíveis no estoque.
@@ -23,9 +26,19 @@ Main
 
     Vale lembrar que o usuário deve inserir as opções, bem como o nome do produto exatamente do modo como são apresentadas no menu.
 
+    No restaurante, as opções são as seguintes:
+
+        Verificar cardapio: Exibe o cardápio disponível para compra.
+        Exibir caixa: Imprime na tela as últimas compras feitas.
+        Ver comanda: Exibe os pedidos já feitos pelo cliente.
+        Pedir <Nome do alimento>: Permite fazer pedidos de acordo com o nome do alimento. Depois, é pedida a quantidade.
+
+        Adicionar saldo e Checkout fazem exatamente a mesma coisa.
+ 
+
 Classes
 
-    O programa Supermercado foi dividido nas classes: Estabelecimento, Cliente, Produto, Fornecedor e VecSupermarket, cada uma dessas com seus devidos métodos e atributos.
+    O programa Estabelecimentos foi dividido nas classes: Estabelecimento, Supermercado, Restaurante, Cliente, Produto, Fornecedor e VecSupermarket, cada uma dessas com seus devidos métodos e atributos.
 
     VecSupermarket
 
@@ -46,23 +59,33 @@ Classes
 
     Estabelecimento
 
-        É a principal classe, que gerencia os produtos disponíveis e contabiliza os lucros e vendas.
+        É a classe que contabiliza os lucros e vendas, e gera os arquivos de caixa.
+        É a classe mãe para Restaurante e Supermercado.
         
-        Na sua construção, é declarado um vector_supermercado de produtos, ou seja, o estoque, e as funções para preenchimento do estoque e geração do arquivo do caixa são chamadas.
-        Além disso, os lucros e total de vendas são definidos para zero.
-
-        Na destruição, esses dados são impressos no arquivo do caixa.
+        Na sua construção, os lucros e total de vendas são definidos para zero.
 
         Seus métodos:
 
-            Setar Array Vendas: Chamado na construção da classe, define um array para controlar a quantidade de produtos vendidos, para cada produto.
-            Consultar estoque: É chamado na construção da classe, procura no arquivo estoque.csv todos os produtos e adiciona-os ao vector de produtos.
-            Gerar caixa: É chamado também na construção da classe, e gera um arquivo caixa.csv para registro do fluxo das compras, e, no final, inserir o relatório de tudo o que foi comprado e o lucro total.
-            Listar produtos: Imprime na tela todos os produtos do estoque e seus devidos atributos.
-            Venda: Recebe o nome de um produto e verifica se tem estoque suficiente para compra. Se sim, faz as atribuições necessárias nas características dos produtos e no estoque na loja. Caso contrário, imprime uma mensagem de erro.
-            Registrar venda: Registra no arquivo caixa.csv a última venda feita, inserindo a quantidade vendida e o nome do produto.
-            Caixa: Imprime na tela as vendas feitas e o lucro total.
-            Encerrar caixa: É chamado na destruição da classe, termina o arquivo caixa.csv inserindo todo o relatório de vendas durante a execução.
+            Gerar caixa: Gera um arquivo de caixa para registro do fluxo das compras, e, no final, inserir o relatório de tudo o que foi comprado e o lucro total.
+            Encerrar caixa: Termina o arquivo de caixa inserindo todo o relatório de vendas durante a execução.
+
+    Restaurante e Supermercado
+
+        São duas classes semelhantes, filhas de Estabelecimento, mas que diferem em alguns aspectos.
+
+        Na construção, definem um vector_supermercado, inserem os produtos de seus respectivos arquivos nesse vector, alocam um array para controle de quantidade de vendas e geram um arquivo de caixa.
+
+        Na destruição, encerram o caixa.
+
+        Têm alguns métodos em comum, isto é, que fazem a mesma coisa mas de forma diferente.
+        São eles:
+
+            Consultar menu/Consultar estoque: Insere os produtos dos arquivos nos vectors.
+            Setar array de vendas: Aloca o array para controle das vendas.
+            Mostrar cardapio/Listar produtos: Exibe na tela todos os produtos disponíveis para compra.
+            Registrar venda: Escreve no arquivo do caixa a última venda feita.
+            Venda: Faz as operações necessárias para processar a venda internamente.
+            Encerrar caixa: Termina o arquivo do caixa exibindo um relatório completo das vendas.
 
     Produto
 	 
@@ -70,13 +93,15 @@ Classes
 
         Na construção, todos os valores são inicializados como nulos ou zeros.
 
-        Possui dois métodos:
+        Possui os seguintes métodos:
 
-            Retornar produto: Recebe uma string, mais especificamente a linha atual do arquivo de estoque, e retorna um obejeto do tipo produto, que vai ser adicionado no vector do estoque. Muitas dificuldades foram encontradas para fazer a formatação do texto em partes, mas foram contornadas da seguinte forma:
+            Retornar produto pro supermercado: Recebe uma string, mais especificamente a linha atual do arquivo de estoque, e retorna um obejeto do tipo produto, que vai ser adicionado no vector do estoque. Muitas dificuldades foram encontradas para fazer a formatação do texto em partes, mas foram contornadas da seguinte forma:
 
                 Contabilizando a quantidade de vírgulas, o programa vai saber onde inserir cada dado. A função getline() retira palavra por palavra entre as vírgulas, e usa o contador no switch para saber onde encaixar cada uma delas. Por exemplo, caso o contador esteja em zero, sabemos que nenhuma vírgula foi encontrada e assim, como o primeiro dado é o código, sabemos onde atribuir o inteiro.
                 O problema chegou na parte do preço, onde há uma vírgula no meio, e nesse caso foi dividido o processo em duas partes. Somamos a primeira parte ao preco do produto como inteiro, e a segunda parte como decimal.
                 Desse modo cada produto teve sua especificação atribuída corretamente.
+
+            Retornar produto pro restaurante: Processa da mesma forma como para o supermercado, com a particularidade de que os produtos no restaurante possuem apenas nome e preço.
 
             Retornar produto do fornecedor: Processa os dados exatamente da mesma forma da anterior, com a exceção de que como no arquivo do fornecedor são apenas 2 informações, considera apenas uma vírgula para diferenciá-las.
 
@@ -84,19 +109,19 @@ Classes
 
         É a classe que define os clientes e registra os dados relativos à individualidade de cada um.
 
-        Na construção é dado um saldo de R$300,00 e uma sacola (vector de produtos).
+        Na construção é dado um saldo de R$300,00 e um vector de produtos (Compras).
         Além disso, é contabilizada a quantidade de clientes numa variável estática, que pode ser compartilhada entre objetos do mesmo tipo. Desse modo, quando cada cliente é construído, usamos a quantidade para atribuir um número de identificação a cada um.
 
         A classe possui os seguintes métodos: 
 
             Adicionar saldo: Adiciona um valor requisitado ao saldo do cliente.
-            Compra: Recebe um produto e o adiciona à sacola do cliente, diminuindo seu saldo, caso seja suficiente. Caso contrário, exibe uma mensagem de erro.
-            Ver sacola: Imprime a sacola completa do cliente, com os produtos inseridos.
-            Registro: Chamado na destruição, recebe o número identificador do cliente, e gera um arquivo cliente_x para todo x < quantidade de clientes. Esse arquivo contém a sacola de cada cliente construído durante a execução do programa.
+            Compra: Recebe um produto e uma quantidade, e adiciona essa quantidade de produtos às compras do cliente, diminuindo seu saldo, caso seja suficiente. Caso contrário, exibe uma mensagem de erro.
+            Ver compras: Imprime as compras do cliente, com os produtos inseridos.
+            Registro: Chamado na destruição, recebe o número identificador do cliente, e gera um arquivo cliente_x para todo x < quantidade de clientes. Esse arquivo contém as compras de cada cliente construído durante a execução do programa.
 
     Fornecedor
 
-        É a classe que define o fornecedor, de onde serão removidos produtos para abastecimento dos estabelecimentos.
+        É a classe que define o fornecedor, de onde serão removidos produtos para abastecimento dos supermercados apenas.
 
         Tem apenas um vector_supermercado para armazenar os produtos internamente.
 
@@ -104,7 +129,7 @@ Classes
 
             Consultar estoque: Consulta o arquivo "fornecedor.csv" e insere no vector os produtos com suas quantidades.
             Listar produtos: Lista os produtos disponíveis para abastecimento.
-            Repassar produtos: Recebe o endereço de uma loja e insere os produtos na quantidade pedida.
+            Repassar produtos: Recebe o endereço de um supermercado e insere os produtos na quantidade pedida.
 
 Outros
     
@@ -120,4 +145,4 @@ Outros
 Compilação e execução
 
     A compilação pode ser feita usando o Makefile produzido.
-    Para rodar bem, o programa precisa dos arquivos estoque.csv e fornecedor.csv na pasta de execução.
+    Para rodar bem, o programa precisa dos arquivos estoque.csv (com vírgulas nos preços), menu.csv e fornecedor.csv na pasta de execução.

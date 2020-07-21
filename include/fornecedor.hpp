@@ -2,7 +2,7 @@
 #define FORNECEDOR_HPP
 
 #include "vecsupermarket.hpp"
-#include "estabelecimento.hpp"
+#include "supermercado.hpp"
 
 class Fornecedor {
 
@@ -15,7 +15,7 @@ class Fornecedor {
 
     void consultarEstoque();
     void listarProdutos();
-    void repassarProdutos(Estabelecimento &loja);
+    void repassarProdutos(Supermercado &loja);
 
 };
 

@@ -5,7 +5,7 @@
 
 Cliente::Cliente() : saldo(300) {
 
-    vector_supermercado <Produto> sacola;
+    vector_supermercado <Produto> compras;
     qntdClientes++;
     numeroCliente = qntdClientes;
 }
@@ -20,12 +20,15 @@ Cliente::~Cliente() {
 int Cliente::qntdClientes {0};
 
 // Recebe um produto como parâmetro, insere na sacola e diminui o saldo do cliente
-void Cliente::compra(Produto item) {
+void Cliente::compra(Produto item, int qntd) {
 
-    if (saldo >= item.preco) {
-        saldo-=item.preco;
-        sacola.push_back(item);
-        std::cout << "\nMercadoria adicionada à sacola com sucesso!\n" << std::endl;
+    if (saldo >= (item.preco)*qntd) {
+        saldo-=(item.preco)*qntd;
+
+        for (int i = 0; i < qntd; i++)
+            compras.push_back(item);
+            
+        //std::cout << "\nComprado com sucesso!\n" << std::endl;
     }
     else
         std::cout << "\nNão há saldo suficiente.\n" << std::endl;
@@ -34,17 +37,17 @@ void Cliente::compra(Produto item) {
 }
 
 // Exibe a sacola completa
-void Cliente::verSacola() {
+void Cliente::verCompras() {
 
-    if (sacola.getSize() == 0) {
-        std::cout << "Nao ha itens na sacola\n" << std::endl;
+    if (compras.getSize() == 0) {
+        std::cout << "Nada foi comprado\n" << std::endl;
         return;
     }
 
-    std::cout << "Sacola: " << std::endl;
+    std::cout << "Compras: " << std::endl;
 
-    for (int i = 0; i < sacola.getSize(); i++)
-        std::cout << "- " << sacola.at(i).nome << std::endl;
+    for (int i = 0; i < compras.getSize(); i++)
+        std::cout << "- " << compras.at(i).nome << std::endl;
 
     std::cout << "\n";
 
@@ -74,8 +77,8 @@ void Cliente::registro(int numero) {
     outfile.open(filename);
         
     outfile << "Registro do cliente " << numero << "\n" << std::endl;
-    for (int i = 0; i < sacola.getSize(); i++)
-        outfile << "- " << sacola.at(i).nome << std::endl;
+    for (int i = 0; i < compras.getSize(); i++)
+        outfile << "- " << compras.at(i).nome << std::endl;
 
     outfile << "\n";
 

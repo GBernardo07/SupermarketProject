@@ -1,5 +1,5 @@
 GCC = g++
-OBJECTS = cliente.o estabelecimento.o main.o produto.o fornecedor.o estoque.o
+OBJECTS = cliente.o estabelecimento.o main.o produto.o fornecedor.o estoque.o supermercado.o restaurante.o
 FLAGS = -std=c++11 -g
 EXECUTABLE = exe
 
@@ -22,6 +22,12 @@ fornecedor.o: src/fornecedor.cpp
 
 estoque.o: src/estoque.cpp
 	$(GCC) $(FLAGS) -c src/estoque.cpp
+
+supermercado.o: src/supermercado.cpp
+	$(GCC) $(FLAGS) -c src/supermercado.cpp
+
+restaurante.o: src/restaurante.cpp
+	$(GCC) $(FLAGS) -c src/restaurante.cpp
 
 $(EXECUTABLE): $(OBJECTS)
 	$(GCC) $(OBJECTS) $(FLAGS) -o $(EXECUTABLE)

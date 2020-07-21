@@ -13,10 +13,9 @@ Produto::~Produto() {
 }
 
 // Funcao que recebe uma linha do arquivo de estoque e retorna um produto
-Produto retornarProduto(std::string linha) {
+Produto retornarProdutoSupermercado(std::string linha) {
 
     int counter = 0;
-    char trash;
     std::stringstream stream(linha);
     std::string word;
     Produto aux;
@@ -55,6 +54,33 @@ Produto retornarProduto(std::string linha) {
     }
 
     return aux;
+}
+
+Produto retornarProdutoRestaurante(std::string linha) {
+
+    int counter = 0;
+    std::stringstream stream(linha);
+    std::string word;
+    Produto aux;
+
+    while(getline(stream, word, ',')) {
+
+        switch (counter) {
+            case 0:
+                aux.nome = word;
+                break;
+            case 1:
+                aux.preco = stod(word.erase(0,3));
+                break;
+            default:
+                break;
+        }
+
+        counter++;
+    }
+
+    return aux;
+
 }
 
 // Realiza o mesmo processo, mas com a formatação diferente
